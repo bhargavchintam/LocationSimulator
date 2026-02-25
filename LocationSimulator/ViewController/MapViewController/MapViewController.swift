@@ -358,14 +358,28 @@ import LocationSpoofer
         self.deviceIsConnectd = false
 
         switch error {
-        case DeviceError.devDiskImageNotFound(_):
-            // Try to download the developer disk image and retry the upload.
-            let os = device.productName!
-            let version = device.majorMinorVersion!
-            if self.downloadDeveloperDiskImage(os: os, iOSVersion: version) {
-                self.connectDevice()
+        case DeviceError.devDiskImageNotFound(let msg):
+            // Check if this is an iOS 17+ device that needs pymobiledevice3
+            if device.requiresPMD3 {
+                window.showError(
+                    "iOS 17+ Device Setup",
+                    message: msg.isEmpty ?
+                        "This device requires pymobiledevice3 for location simulation.\n\n" +
+                        "1. Install: python3 -m pip install pymobiledevice3\n" +
+                        "2. Then restart LocationSimulator.\n\n" +
+                        "When connecting, you'll be prompted for your admin password to start the tunnel service."
+                        : msg,
+                    localize: false
+                )
             } else {
-                window.showError("DEVDISK_DOWNLOAD_FAILED_ERROR", message: "DEVDISK_DOWNLOAD_FAILED_ERROR_MSG")
+                // Try to download the developer disk image and retry the upload.
+                let os = device.productName!
+                let version = device.majorMinorVersion!
+                if self.downloadDeveloperDiskImage(os: os, iOSVersion: version) {
+                    self.connectDevice()
+                } else {
+                    window.showError("DEVDISK_DOWNLOAD_FAILED_ERROR", message: "DEVDISK_DOWNLOAD_FAILED_ERROR_MSG")
+                }
             }
         case DeviceError.devMode:
             device.enabledDeveloperModeToggleInSettings()

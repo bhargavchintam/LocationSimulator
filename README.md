@@ -1,10 +1,9 @@
 
-> **Warning**:    
-> It is not clear if I will be able to support iOS 17. For more details click [here](https://github.com/Schlaubischlump/LocationSimulator/issues/171).   
-> I do not support beta versions of iOS.
+> **Note — iOS 17+ Support**:    
+> This fork adds **pymobiledevice3** support for iOS 17 and later (including iOS 26+). Apple removed DeveloperDiskImage-based location simulation starting in iOS 17 and replaced it with RemoteXPC tunneling. This fork handles that transparently — see the [iOS 17+ Setup](#ios-17-setup) section below.
 
-> **Note**:   
-> If you use iOS 16 or greater you need to enable Developer Mode first. The Developer Mode option should show up in settings the first time you try to use your device with LocationSimulator, after you received the warning, that you must enable Developer Mode. You can read the following [issue](https://github.com/Schlaubischlump/LocationSimulator/issues/128) for more informations.
+> **Note — iOS 16**:   
+> If you use iOS 16 you need to enable Developer Mode first. The Developer Mode option should show up in settings the first time you try to use your device with LocationSimulator after you receive the warning that you must enable Developer Mode. See this [issue](https://github.com/Schlaubischlump/LocationSimulator/issues/128) for more information.
 
 [![License: GNU General Public License version 3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://opensource.org/licenses/gpl-3.0) 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate/?hosted_button_id=9NR3CLRUG22SJ)
@@ -20,6 +19,7 @@ LocationSimulator is a macOS app (10.15.x and later) which allows spoofing the l
 
 - [Background](#background)
 - [Features](#features)
+- [iOS 17+ Setup](#ios-17-setup)
 - [Install](#install)
 - [Build](#build)
     - [Requirements](#requirements)
@@ -30,7 +30,6 @@ LocationSimulator is a macOS app (10.15.x and later) which allows spoofing the l
     - [Stop spoofing](#stop-spoofing)
 - [License](#license)
 - [Contribute](#contribute)
-- [Donate](#donate)
 - [Enhancement ideas](#enhancement-ideas)
 
 ## Background
@@ -49,20 +48,51 @@ While I originally planed to build upon the fantastic work of [Watanabe Toshinor
 - [x] Support network devices.
 - [x] Search for locations.
 - [x] Support dark mode.
+- [x] **iOS 17+ support** via pymobiledevice3 (RemoteXPC/tunneld).
 
-> **Note**:    
-> LocationSimulator will try to download the corresponding `DeveloperDiskImage.dmg` and `DeveloperDiskImage.dmg.signature` for your iOS Version from github, since I can not legally distribute these files. If the download should not work, get the files by installing Xcode and copy or link them to:    
-> 
->```
->~/Library/Application Support/LocationSimulator/{YOUR_PLATFORM}/{MAJOR_YOUR_IOS_VERSION}.{MINOR_YOUR_IOS_VERSION}/
->```    
-> `YOUR_PLATFORM` might be `iPhone OS` (iPhone and iPad), `Watch OS` (Apple Watch) or `Tv OS` (Apple TV). `MAJOR_YOUR_IOS_VERSION` might `14` and `MINOR_YOUR_IOS_VERSION` might be `3` for a device running iOS 14.3.
->
-> As of v0.1.8 this folder moved to: 
->```
->~/Library/Containers/com.schlaubi.LocationSimulator/Data/Library/Application Support/LocationSimulator/
->```
-> As of v0.1.9 you can manage these files using the `DeveloperDisk` preferences tab.
+## iOS 17+ Setup
+
+Apple removed the legacy `com.apple.dt.simulatelocation` lockdown service starting with iOS 17. Location simulation now requires the **DVT instruments protocol** accessed through a RemoteXPC tunnel. This fork integrates [pymobiledevice3](https://github.com/doronz88/pymobiledevice3) to handle this transparently.
+
+### Prerequisites
+
+1. **Python 3.8+** — Install from [python.org](https://www.python.org/downloads/) or via Homebrew:
+   ```shell
+   brew install python3
+   ```
+
+2. **pymobiledevice3** — Install the latest version:
+   ```shell
+   python3 -m pip install -U pymobiledevice3
+   ```
+
+3. **Developer Mode** on your iOS device — This is required for all developer services on iOS 16+:
+   - Connect your device to your Mac via USB
+   - Open **Settings** → **Privacy & Security** → **Developer Mode**
+   - Toggle **Developer Mode** on
+   - Your device will reboot — after reboot, confirm the prompt to enable Developer Mode
+   
+   > If you don't see the Developer Mode option, connect your device to Xcode first (or run `pymobiledevice3 amfi enable-developer-mode`), then check Settings again.
+
+### How It Works
+
+When you select an iOS 17+ device in LocationSimulator:
+
+1. **Tunnel creation** — The app starts `pymobiledevice3 remote tunneld` as a background daemon. This requires **admin privileges** (you'll see a macOS password prompt once per session). The tunnel creates a secure connection to the device's developer services.
+
+2. **Location simulation** — Uses `pymobiledevice3 developer dvt simulate-location set` through the tunnel. The DVT instruments protocol keeps a persistent connection to maintain the simulated location.
+
+3. **Location reset** — When you reset the location or quit the app, the simulation process is terminated and the device returns to real GPS.
+
+### Troubleshooting
+
+| Problem | Solution |
+|---------|----------|
+| "Failed to start tunneld" | Run manually: `sudo pymobiledevice3 remote tunneld -d` |
+| "Failed to start service" | Ensure Developer Mode is enabled and DeveloperDiskImage is mounted: `pymobiledevice3 mounter auto-mount` |
+| Location doesn't change | Check tunnel is running: `curl http://127.0.0.1:49151` should return device JSON |
+| pymobiledevice3 not found | Verify installation: `which pymobiledevice3` or `python3 -m pymobiledevice3 --help` |
+| Password prompt keeps appearing | tunneld exited — check logs or run `sudo pymobiledevice3 remote tunneld` in a terminal to see errors |
 
 ## Install
 
@@ -163,33 +193,7 @@ The whole project is licensed under the [GNU General Public License version 3](L
 ## Contribute
 Since I maintain this project in my freetime, I always appreciate any help I get. Even if you are not a programmer and do not know anything about coding you can still help out. It would be great if more languages were available. If you know any other language and you are willing to invest some time to help with the translation let me know [here](https://github.com/Schlaubischlump/LocationSimulator/issues/65)! You can find the existing localization files [here](https://github.com/Schlaubischlump/LocationSimulator-Localization). I want this software to be as stable as possible, if you find any bug please report it by opening a new issue. If you are a programmer, feel free to contribute bug fixes or new features. It would be great if you run swift-lint on your code before submitting pull requests.
 
-While you are here, consider leaving a Github star. It keeps me motivated. 
-
-## Donate
-Donations are always welcome! I will use the money to further develop the software in my free time and to fund the Apple Developer Membership to notarize the app. You can donate from inside the application or from the github page using the sponsor button. Choose `Help -> Donate...` or `LocationSimualtor -> Preferences -> Info -> Donate` to donate from inside the app. I'll add more donation options over time. Currently you can use PayPal or Ethereum. 
-
-
-
-<details>
-<summary>
-<b>1. Target: Apple Developer License (recurring)</b>
-</summary></br>
-	Each year every Apple Developer needs to pay a fee to Apple in order to sign his applications and to gain access to certain developer resoures. If your application is not signed, the user will see a lot of warnings about the program being malicious and the user might need to grant special permissions to start the app.
-</details>
-
-<details>
-<summary>
-<b>2. Target: Parallels Desktop 18</b>
-</summary></br>
-	In order to verify that LocationSimulator is working on older MacOS versions, I need to be able to run all of them. Since I only have a single MacBook, I use Parallels Desktop to run multiple older versions of MacOS simultaneously on a single Mac.
-</details>
-
-<details>
-<summary>
-<b>3. Target: Hopper Disassembler (<i>Current</i>)</b>
-</summary></br>
-	Hopper is a disassembler for macOS and linux. You need to disassemble a program if the source code for the program is not open source, but you still want to figure out how the program is working. I often need a disassembler to reverse engineer Apples source code, e.g. if they change the API to interact with the iOS Simulator. Currently I'm using the free version of Hopper. That is, every 30 minutes I need to restart Hopper and have to reload everything. The commercial version does not have this limitation.
-</details>
+While you are here, consider leaving a Github star. It keeps me motivated.
 
 ## Enhancement ideas
 Look at the [`Projects`](https://github.com/Schlaubischlump/LocationSimulator/projects?type=classic) tab to see a list of planned features for the next releases. 
