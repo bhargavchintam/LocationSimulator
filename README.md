@@ -96,18 +96,30 @@ When you select an iOS 17+ device in LocationSimulator:
 
 ## Install
 
-Download the latest [release](https://github.com/Schlaubischlump/LocationSimulator/releases) build from github to get the latest changes or
+### Option 1: Download DMG (Recommended)
 
-1. Install [homebrew](https://brew.sh) by entering the following command in your terminal: 
+Download the latest DMG from [**Releases**](https://github.com/bhargavchintam/LocationSimulator/releases/latest), open it, and drag **LocationSimulator** to your **Applications** folder.
+
+> **Note**: Since this build is ad-hoc signed, macOS may show a warning. Right-click the app → **Open** to bypass Gatekeeper on first launch.
+
+### Option 2: Homebrew
+
+1. Install [Homebrew](https://brew.sh) if you don't have it:
 
 	```shell
 	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 	```
-2. Install LocationSimulator with [homebrew](https://brew.sh) using:
+
+2. Tap this repo and install:
 
 	```shell
-	brew install locationsimulator
+	brew tap bhargavchintam/LocationSimulator https://github.com/bhargavchintam/LocationSimulator
+	brew install --cask bhargavchintam/LocationSimulator/locationsimulator
 	```
+
+### Option 3: Build from source
+
+See the [Build](#build) section below.
 
 ## Build
 
