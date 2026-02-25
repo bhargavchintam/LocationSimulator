@@ -175,7 +175,13 @@ class SidebarViewController: NSViewController {
                     // A device was connected => create and show the corresponding MapViewController.
                     viewController = self.storyboard?.instantiateController(withIdentifier: "MapViewController")
                     if let mapViewController = viewController as? MapViewController {
-                        mapViewController.device = device
+                        // Wrap iOS 17+ devices in PMD3DeviceWrapper for pymobiledevice3 support
+                        if let iosDevice = device as? IOSDevice,
+                           PMD3Helper.deviceRequiresPMD3(iosDevice.majorVersion) {
+                            mapViewController.device = PMD3DeviceWrapper(wrapping: iosDevice)
+                        } else {
+                            mapViewController.device = device
+                        }
                         // Set the currently selected move type.
                         let windowController = self.view.window?.windowController as? WindowController
                         mapViewController.moveType = windowController?.moveType

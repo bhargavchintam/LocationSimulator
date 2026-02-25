@@ -1,0 +1,60 @@
+{
+  "originHash" : "6d6e6843a9780196fb4b2c1f13fd83643493df9a7fa74d0b864c20342a46f142",
+  "pins" : [
+    {
+      "identity" : "clogger",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Schlaubischlump/CLogger",
+      "state" : {
+        "revision" : "3e86131e5670210f68bcf384067c49df74daa75a",
+        "version" : "0.0.1"
+      }
+    },
+    {
+      "identity" : "downloader",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Schlaubischlump/Downloader.git",
+      "state" : {
+        "revision" : "81c0732d2524322d0183e06c6ce96e70d9cefa2f",
+        "version" : "0.0.3"
+      }
+    },
+    {
+      "identity" : "gpxparser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Schlaubischlump/GPXParser",
+      "state" : {
+        "revision" : "f892628aa7a72608bc89ea1fea1d6562447bfbc2",
+        "version" : "0.0.2"
+      }
+    },
+    {
+      "identity" : "locationspoofer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Schlaubischlump/LocationSpoofer.git",
+      "state" : {
+        "revision" : "9b68601e59bfbfc92a562f91cbf34277f1107bbb",
+        "version" : "0.0.4"
+      }
+    },
+    {
+      "identity" : "openssl-apple",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/passepartoutvpn/openssl-apple.git",
+      "state" : {
+        "revision" : "757c074af45e4f2514fe63f649ccdde966183e90",
+        "version" : "1.1.11700"
+      }
+    },
+    {
+      "identity" : "suggestionpopup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Schlaubischlump/SuggestionPopup.git",
+      "state" : {
+        "revision" : "0f8838a7747a0e2e06c936dd677bd871eece94d7",
+        "version" : "0.0.6"
+      }
+    }
+  ],
+  "version" : 3
+}

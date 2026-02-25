@@ -2448,7 +2448,6 @@
             <objects>
                 <tabViewController selectedTabViewItemIndex="0" tabStyle="toolbar" canPropagateSelectedChildViewControllerTitle="NO" id="rSB-OX-bfh" customClass="PreferencesTabViewController" customModule="LocationSimulator" customModuleProvider="target" sceneMemberID="viewController">
                     <tabViewItems>
-                        <tabViewItem label="Info" image="NSInfo" id="fCK-nG-5Tl"/>
                         <tabViewItem label="General" identifier="" image="NSPreferencesGeneral" id="Zw5-Ce-8bO"/>
                         <tabViewItem label="DeveloperDiskImages" image="NSFolder" id="7nj-4I-h6E" userLabel="DeveloperDiskImages"/>
                         <tabViewItem label="Network" identifier="" image="NSNetwork" id="gbr-Wo-Ace"/>
@@ -2463,7 +2462,6 @@
                         </connections>
                     </tabView>
                     <connections>
-                        <segue destination="uVV-Vv-12T" kind="relationship" relationship="tabItems" id="odq-jy-Lbr"/>
                         <segue destination="eae-4P-ykM" kind="relationship" relationship="tabItems" id="A2N-3S-Vxn"/>
                         <segue destination="ToF-vt-NtF" kind="relationship" relationship="tabItems" id="pDF-Dg-gVG"/>
                         <segue destination="7gW-SW-Mts" kind="relationship" relationship="tabItems" id="wHO-xv-mde"/>
@@ -2931,22 +2929,7 @@
             </objects>
             <point key="canvasLocation" x="-136" y="1548"/>
         </scene>
-        <!--Info View Controller-->
-        <scene sceneID="fza-CR-btx">
-            <objects>
-                <viewController id="uVV-Vv-12T" customClass="InfoViewController" customModule="LocationSimulator" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="Wj1-Wf-B6v">
-                        <rect key="frame" x="0.0" y="0.0" width="664" height="16"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </view>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="localeKey" value="INFO_TITLE_SETTING"/>
-                    </userDefinedRuntimeAttributes>
-                </viewController>
-                <customObject id="mX0-Ez-e8l" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1604" y="1661"/>
-        </scene>
+
         <!--Network View Controller-->
         <scene sceneID="Irb-r9-9bb">
             <objects>

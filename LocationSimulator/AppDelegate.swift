@@ -24,25 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ notification: Notification) {
-        // We do not want to present the donation and intro window at the same time.
-        if !self.openOnboardingScreenOnFirstLaunch() {
-            self.openInfoViewOnVersionUpdate()
-        }
-    }
-
-    /// Open the InfoViewController when the version number changed. This way we can inform the user about critical
-    /// changes and remind him/her to donate ;)
-    @discardableResult
-    private func openInfoViewOnVersionUpdate() -> Bool {
-        let defaults = UserDefaults.standard
-        if defaults.lastAppVersion != kAppVersion {
-            // FIXME: Segue would be nicer, but does not work
-            AppMenubarItem.preferences.triggerAction()
-            // Update the last app version
-            defaults.lastAppVersion = kAppVersion
-            return true
-        }
-        return false
+        self.openOnboardingScreenOnFirstLaunch()
     }
 
     @discardableResult
